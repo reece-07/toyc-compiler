@@ -1,0 +1,12 @@
+int a = 1;
+
+int inc() {
+  a = a + 1;
+  return a;
+}
+
+int b = inc();
+
+int main() {
+  return a + b;
+}

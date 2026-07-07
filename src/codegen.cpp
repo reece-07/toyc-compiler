@@ -399,14 +399,16 @@ class GlobalInitEmitter {
 
   void loadGlobal(const std::string& name, const std::string& targetReg) {
     const Storage storage = globals_.at(name);
-    out_ << "  la t0, " << storage.label << '\n';
-    out_ << "  lw " << targetReg << ", 0(t0)\n";
+    const char* scratchReg = targetReg == "t2" ? "t3" : "t2";
+    out_ << "  la " << scratchReg << ", " << storage.label << '\n';
+    out_ << "  lw " << targetReg << ", 0(" << scratchReg << ")\n";
   }
 
   void storeGlobal(const std::string& name, const std::string& sourceReg) {
     const Storage storage = globals_.at(name);
-    out_ << "  la t0, " << storage.label << '\n';
-    out_ << "  sw " << sourceReg << ", 0(t0)\n";
+    const char* scratchReg = sourceReg == "t2" ? "t3" : "t2";
+    out_ << "  la " << scratchReg << ", " << storage.label << '\n';
+    out_ << "  sw " << sourceReg << ", 0(" << scratchReg << ")\n";
   }
 
   void pushRegister(const std::string& reg) {
@@ -914,8 +916,9 @@ class FunctionEmitter {
       return;
     }
 
-    out_ << "  la t0, " << storage.label << '\n';
-    out_ << "  lw " << targetReg << ", 0(t0)\n";
+    const char* scratchReg = targetReg == "t2" ? "t3" : "t2";
+    out_ << "  la " << scratchReg << ", " << storage.label << '\n';
+    out_ << "  lw " << targetReg << ", 0(" << scratchReg << ")\n";
   }
 
   void storeName(const std::string& name, const std::string& sourceReg) {
@@ -930,8 +933,9 @@ class FunctionEmitter {
       return;
     }
 
-    out_ << "  la t0, " << storage.label << '\n';
-    out_ << "  sw " << sourceReg << ", 0(t0)\n";
+    const char* scratchReg = sourceReg == "t2" ? "t3" : "t2";
+    out_ << "  la " << scratchReg << ", " << storage.label << '\n';
+    out_ << "  sw " << sourceReg << ", 0(" << scratchReg << ")\n";
   }
 
   Storage lookup(const std::string& name) const {
