@@ -1,0 +1,8 @@
+int main() {
+  // line comment
+  int x = 1;
+  /*
+    block comment
+  */
+  return !(x - 1);
+}

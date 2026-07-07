@@ -1,0 +1,5 @@
+const int base = 2;
+const int next = base + 5;
+int main() {
+  return next;
+}

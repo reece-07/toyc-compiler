@@ -1,5 +1,17 @@
+# macOS
+.DS_Store
+
+# Build artifacts
 build/
 tmp/
 *.o
 *.out
-.DS_Store
+*.s
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Editor / local temp files
+*.swp
+*.tmp

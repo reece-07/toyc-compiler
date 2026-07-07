@@ -1,0 +1,10 @@
+void ping() {
+  return;
+}
+
+int main() {
+  if (ping()) {
+    return 1;
+  }
+  return 0;
+}

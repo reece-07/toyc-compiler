@@ -1,0 +1,8 @@
+void ping() {
+  return 1;
+}
+
+int main() {
+  ping();
+  return 0;
+}

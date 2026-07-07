@@ -17,6 +17,17 @@ bool isIdentifierPart(char ch) {
   return std::isalnum(static_cast<unsigned char>(ch)) != 0 || ch == '_';
 }
 
+bool tokenEndsExpression(TokenKind kind) {
+  switch (kind) {
+    case TokenKind::Identifier:
+    case TokenKind::Number:
+    case TokenKind::RParen:
+      return true;
+    default:
+      return false;
+  }
+}
+
 }  // namespace
 
 Lexer::Lexer(std::string input, DiagnosticEngine& diagnostics)
@@ -41,6 +52,12 @@ std::vector<Token> Lexer::tokenize() {
 
     if (std::isdigit(static_cast<unsigned char>(ch)) != 0) {
       tokens.push_back(lexNumber());
+      continue;
+    }
+
+    if (ch == '-' && std::isdigit(static_cast<unsigned char>(peekNext())) != 0 &&
+        (tokens.empty() || !tokenEndsExpression(tokens.back().kind))) {
+      tokens.push_back(lexNumber(true));
       continue;
     }
 
@@ -223,26 +240,37 @@ Token Lexer::lexIdentifierOrKeyword() {
   return Token{TokenKind::Identifier, lexeme, location, std::nullopt};
 }
 
-Token Lexer::lexNumber() {
+Token Lexer::lexNumber(bool negative) {
   const SourceLocation location{index_, line_, column_};
   std::string lexeme;
+  if (negative) {
+    lexeme.push_back(advance());
+  }
 
   while (!isAtEnd() && std::isdigit(static_cast<unsigned char>(peek())) != 0) {
     lexeme.push_back(advance());
   }
 
   std::int64_t value = 0;
+  const std::int64_t limit =
+      negative ? static_cast<std::int64_t>(std::numeric_limits<std::int32_t>::max()) + 1
+               : static_cast<std::int64_t>(std::numeric_limits<std::int32_t>::max());
+
   for (char ch : lexeme) {
+    if (ch == '-') {
+      continue;
+    }
     value = value * 10 + (ch - '0');
-    if (value > std::numeric_limits<std::int32_t>::max()) {
+    if (value > limit) {
       diagnostics_.report(location, "integer literal out of range");
-      value = std::numeric_limits<std::int32_t>::max();
+      value = limit;
       break;
     }
   }
 
-  return Token{TokenKind::Number, lexeme, location,
-               static_cast<std::int32_t>(value)};
+  const std::int32_t intValue =
+      negative ? static_cast<std::int32_t>(-value) : static_cast<std::int32_t>(value);
+  return Token{TokenKind::Number, lexeme, location, intValue};
 }
 
 Token Lexer::simpleToken(TokenKind kind, SourceLocation location,

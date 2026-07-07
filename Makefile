@@ -4,7 +4,7 @@ CXXFLAGS ?= -std=c++20 -Wall -Wextra -Wpedantic -Iinclude
 SRC := $(wildcard src/*.cpp)
 OUT := build/toyc
 
-.PHONY: all clean
+.PHONY: all clean test
 
 all: $(OUT)
 
@@ -14,3 +14,6 @@ $(OUT): $(SRC)
 
 clean:
 	rm -rf build
+
+test: $(OUT)
+	sh tests/run_tests.sh

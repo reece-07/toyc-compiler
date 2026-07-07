@@ -1,0 +1,7 @@
+int sum(int x, int x) {
+  return x;
+}
+
+int main() {
+  return sum(1, 2);
+}

@@ -1,0 +1,11 @@
+int helper() {
+  return 1;
+}
+
+int helper() {
+  return 2;
+}
+
+int main() {
+  return helper();
+}

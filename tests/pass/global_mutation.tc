@@ -1,0 +1,10 @@
+int g = 1;
+
+int bump() {
+  g = g + 4;
+  return g;
+}
+
+int main() {
+  return bump();
+}

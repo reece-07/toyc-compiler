@@ -1,0 +1,7 @@
+int seed = 2;
+int next = seed + 3;
+int final_value = next * 2;
+
+int main() {
+  return final_value;
+}

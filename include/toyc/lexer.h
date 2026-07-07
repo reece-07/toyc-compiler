@@ -22,7 +22,7 @@ class Lexer {
   bool match(char expected);
   void skipWhitespaceAndComments();
   Token lexIdentifierOrKeyword();
-  Token lexNumber();
+  Token lexNumber(bool negative = false);
   Token simpleToken(TokenKind kind, SourceLocation location, std::string lexeme);
 
   std::string input_;

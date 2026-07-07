@@ -1,0 +1,9 @@
+int helper() {
+  return 7;
+}
+
+int g = helper();
+
+int main() {
+  return g;
+}

@@ -1,0 +1,16 @@
+int touched = 0;
+
+int mark() {
+  touched = 1;
+  return 1;
+}
+
+int main() {
+  if (0 && mark()) {
+    return 2;
+  }
+  if (1 || mark()) {
+    return touched;
+  }
+  return 3;
+}

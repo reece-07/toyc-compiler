@@ -286,6 +286,15 @@ class Analyzer {
       return;
     }
 
+    if (lookupSymbol(call->callee) != nullptr) {
+      diagnostics_.report(call->location,
+                          "identifier '" + call->callee + "' is not a function");
+      for (const auto& argument : call->arguments) {
+        analyzeExpr(*argument, ExprContext::Value);
+      }
+      return;
+    }
+
     const auto found = functions_.find(call->callee);
     if (found == functions_.end()) {
       diagnostics_.report(call->location,

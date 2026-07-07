@@ -1,0 +1,11 @@
+int add1(int x) {
+  {
+    int x = 9;
+    x = x + 1;
+  }
+  return x + 1;
+}
+
+int main() {
+  return add1(4);
+}
